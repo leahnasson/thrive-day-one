@@ -315,6 +315,54 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--text);min-height
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
 .tab-panel{display:none;flex-direction:column;align-items:center;width:100%;}
 .tab-panel.open{display:flex;}
+
+/* ── MOBILE OPTIMISATIONS ── */
+/* Remove blue tap flash on all interactive elements */
+*{-webkit-tap-highlight-color:transparent;}
+/* Safe area padding for iPhone notch/home bar */
+.screen.active{padding-bottom:max(80px,calc(60px + env(safe-area-inset-bottom)));}
+/* Scrollable tab bar — never wraps, always fits */
+.main-tabs{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.main-tabs::-webkit-scrollbar{display:none;}
+.mtab{flex-shrink:0;}
+@media(max-width:480px){
+  .screen.active{padding:24px 16px max(80px,calc(60px + env(safe-area-inset-bottom)));}
+  .main-tabs{margin-bottom:20px;}
+  .mtab{min-width:56px;font-size:0.65rem;padding:7px 4px;}
+  /* Tighter section headings */
+  .sec-title{font-size:clamp(1.7rem,8vw,2.8rem);}
+  .sec-sub{font-size:0.85rem;}
+  /* Bigger tap targets for quiz options */
+  .q-opt{padding:14px 15px;font-size:0.92rem;}
+  /* Star rating buttons fit 5 across */
+  .star-btn{width:44px;height:44px;font-size:1.3rem;}
+  .refl-stars{gap:5px;}
+  /* Hormone flip cards */
+  .card-stage{height:260px;}
+  .cp-stage{min-height:300px;}
+  .cp-flip-card{min-height:300px;}
+  /* Flip progress pips slightly smaller */
+  .flip-pip{width:18px;height:18px;font-size:0.58rem;}
+  /* Closing screen */
+  .closing-title{font-size:clamp(2.2rem,9vw,3.5rem);}
+  .closing-tiles{gap:8px;}
+  .closing-tile{padding:12px 10px;}
+  /* Entry screen */
+  .entry-title{font-size:clamp(2.6rem,13vw,5rem);}
+  /* Reflection chips — slightly smaller on very small screens */
+  .refl-chip{padding:6px 11px;font-size:0.78rem;}
+  /* Connection card filter buttons */
+  .conn-filter-btn{padding:5px 11px;font-size:0.74rem;}
+  /* Back buttons full width */
+  .btn-outline{width:100%;}
+  /* Pick grid hormone selector */
+  .pick-grid{gap:5px;}
+  .pick-item{padding:6px 2px;font-size:0.62rem;}
+  .pick-item .pe{font-size:1.1rem;}
+  /* Splash screen */
+  .splash-screen{padding:30px 20px;}
+  .splash-title{font-size:clamp(1.6rem,7vw,2.4rem);}
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -425,9 +473,8 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--text);min-height
 
     <!-- Submit -->
     <div style="width:100%;max-width:480px">
-      <button class="btn-enter" id="refl-submit" onclick="submitReflection()" style="width:100%">SAVE MY REFLECTION →</button>
+      <button class="btn-enter" id="refl-submit" onclick="submitReflection()" style="width:100%">CONTINUE →</button>
       <div class="refl-status" id="refl-status"></div>
-      <button id="refl-continue" onclick="switchTab('crew',document.querySelectorAll('.mtab')[1])" style="display:none;width:100%;margin-top:10px" class="btn-outline">CONTINUE →</button>
     </div>
   </div>
 
@@ -480,7 +527,7 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--text);min-height
       </div>
       <div class="quiz-lock-msg" id="quiz-lock-msg"></div>
       <button id="quiz-unlock-btn" class="btn-primary" style="max-width:540px;margin-top:16px;width:100%;display:none" onclick="switchTab('quiz',document.querySelectorAll('.mtab')[2])">TAKE THE QUIZ →</button>
-      <button class="btn-outline" style="max-width:540px;margin-top:10px;width:100%" onclick="switchTab('mood',document.querySelectorAll('.mtab')[0])">← Back to Reflect</button>
+      <button class="btn-outline" style="max-width:540px;margin-top:10px;width:100%" onclick="document.getElementById('crew-cards').style.display='none';document.getElementById('crew-overview').style.display='flex';window.scrollTo(0,0);">← Back</button>
     </div>
   </div>
 
@@ -1412,22 +1459,11 @@ async function submitReflection() {
         last_tab:localStorage.getItem('sbf_student_tab_'+stateKey)||'mood',
         updated_at:new Date().toISOString()
       },{onConflict:'name_key'});
-      btn.textContent='\u2713 SAVED';
-      btn.style.background='#16a34a';
-      statusEl.innerHTML='<span style="color:#16a34a;font-weight:600">Reflection saved.</span>';
-      document.getElementById('refl-continue').style.display='block';
     }catch(e){
-      btn.disabled=false;
-      btn.textContent='SAVE MY REFLECTION \u2192';
-      statusEl.innerHTML='<span style="color:var(--red)">Couldn\'t save \u2014 try again.</span>';
       console.error(e);
     }
-  } else {
-    btn.textContent='\u2713 SAVED';
-    btn.style.background='#16a34a';
-    statusEl.innerHTML='<span style="color:#16a34a;font-weight:600">Reflection saved.</span>';
-    document.getElementById('refl-continue').style.display='block';
   }
+  switchTab('crew', document.querySelectorAll('.mtab')[1]);
 }
 
 // \u2500\u2500 OVERVIEW (paged, 1 per page) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
