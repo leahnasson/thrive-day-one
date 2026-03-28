@@ -2,10 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>SBF Thrive Day 1 — Parent Guide</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+*{-webkit-tap-highlight-color:transparent;}
+button,input,select,textarea{touch-action:manipulation;}
 :root{
   --bg:#fafaf9;--surface:#fff;--surface2:#f2f0ec;
   --border:#e4e2dc;--text:#1c1c1a;--muted:#6a6860;
@@ -54,7 +56,7 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--text);min-height
 .entry-tag{font-size:0.68rem;color:var(--muted);margin-top:14px;letter-spacing:0.08em;text-transform:uppercase;}
 
 /* MAIN */
-.main{max-width:680px;margin:0 auto;padding:28px 20px 80px;}
+.main{max-width:680px;margin:0 auto;padding:28px 20px calc(80px + env(safe-area-inset-bottom));}
 .tab-panel{display:none;}
 .tab-panel.open{display:block;}
 
@@ -89,7 +91,7 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--text);min-height
 .refl-chip{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:7px 14px;font-size:0.82rem;font-weight:500;color:var(--muted);cursor:pointer;transition:all 0.15s;}
 .refl-chip:hover{border-color:var(--red);color:var(--text);}
 .refl-chip.picked{border-color:var(--red);background:var(--red-light);color:var(--red);font-weight:600;}
-.refl-input{width:100%;background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;font-family:var(--font-b);font-size:0.92rem;color:var(--text);outline:none;transition:border 0.2s;margin-top:10px;}
+.refl-input{width:100%;background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;font-family:var(--font-b);font-size:1rem;color:var(--text);outline:none;transition:border 0.2s;margin-top:10px;}
 .refl-input:focus{border-color:var(--red);}
 .refl-status{font-size:0.84rem;margin-top:8px;min-height:20px;}
 
@@ -145,7 +147,7 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--text);min-height
 .cp-dot{width:6px;height:6px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);cursor:pointer;transition:all 0.2s;}
 .cp-dot.active{background:var(--red);border-color:var(--red);width:16px;border-radius:3px;}
 .cp-dot.read{background:var(--red);border-color:var(--red);opacity:0.35;}
-.c-arrow{background:#fff;border:1.5px solid var(--border);color:var(--text);border-radius:8px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;cursor:pointer;transition:all 0.2s;}
+.c-arrow{background:#fff;border:1.5px solid var(--border);color:var(--text);border-radius:8px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;cursor:pointer;transition:all 0.2s;}
 .c-arrow:hover{border-color:var(--red);color:var(--red);}
 .cp-unlock{width:100%;background:var(--red-light);border:1px solid var(--red-border);border-radius:10px;padding:11px 14px;font-size:0.82rem;color:var(--muted);text-align:center;display:none;margin-bottom:10px;}
 .cp-unlock.show{display:block;}
@@ -160,7 +162,7 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--text);min-height
 .q-txt{font-family:var(--font-d);font-size:1.2rem;line-height:1.3;margin-bottom:4px;}
 .q-sub{font-size:0.78rem;color:var(--muted);margin-bottom:16px;}
 .q-opts{display:flex;flex-direction:column;gap:8px;}
-.q-opt{background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;font-size:0.88rem;font-weight:500;cursor:pointer;transition:all 0.2s;text-align:left;color:var(--text);}
+.q-opt{background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:13px 14px;font-size:0.95rem;font-weight:500;cursor:pointer;transition:all 0.2s;text-align:left;color:var(--text);}
 .q-opt:hover:not(:disabled){border-color:var(--red);background:var(--red-light);}
 .q-opt.correct{border-color:#16a34a;background:#f0fdf4;color:#166534;}
 .q-opt.wrong{border-color:var(--red);background:var(--red-light);color:var(--red2);}
@@ -393,19 +395,18 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--text);min-height
         </div>
         <input class="refl-input" type="text" id="p-refl-remember" placeholder="Or type your own..." maxlength="200" autocomplete="off"/>
       </div>
-      <button class="btn-primary" onclick="pSubmitReflection()">SAVE MY REFLECTION →</button>
       <div class="refl-status" id="p-refl-status"></div>
       <div class="btn-row" style="margin-top:10px">
-        <button class="btn-outline" id="p-refl-continue" style="display:none" onclick="switchPTab('crew',document.querySelectorAll('.pnav-btn')[2])">MEET THE CREW →</button>
-        <button class="btn-outline" onclick="switchPTab('welcome',document.querySelectorAll('.pnav-btn')[0])">← Back</button>
+        <button class="btn-primary" onclick="pSubmitReflection()">CONTINUE →</button>
+        <button class="btn-outline" onclick="goBackP()">← Back</button>
       </div>
     </div>
 
     <!-- THE CREW -->
     <div id="ptab-crew" class="tab-panel">
       <div class="eyebrow">Body HQ</div>
-      <h1 class="sec-title">YOUR BODY<br><span>HAS A CREW TOO.</span></h1>
-      <p class="sec-sub">These hormones run in your body too. They shape how you feel under pressure, how patient you are, and how connected you feel. Flip each card to learn about them.</p>
+      <h1 class="sec-title">YOUR BODY<br><span>HAS A CREW.</span></h1>
+      <p class="sec-sub">Have you ever wondered why your child shuts down after a hard day, or suddenly explodes over something small? The answer is often chemical — not personal. These eight hormones run in both your body and your child's. They shape how you feel under pressure, how you sleep, and how connected you feel to the people around you. Tap each card to learn about them.</p>
 
       <!-- progress -->
       <div class="cp-progress-bar"><div class="cp-progress-fill" id="crew-prog-fill" style="width:0%"></div></div>
@@ -424,7 +425,7 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--text);min-height
       <!-- lock -->
       <div class="cp-unlock" id="crew-unlock"></div>
       <button class="btn-primary" id="crew-next-btn" style="display:none;margin-top:8px" onclick="switchPTab('quiz',document.querySelectorAll('.pnav-btn')[3])">TAKE THE QUIZ →</button>
-      <div style="margin-top:10px"><button class="btn-outline" onclick="switchPTab('reflect',document.querySelectorAll('.pnav-btn')[1])">← Back</button></div>
+      <div style="margin-top:10px"><button class="btn-outline" onclick="goBackP()">← Back</button></div>
     </div>
 
     <!-- MY BRAIN -->
@@ -432,7 +433,7 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--text);min-height
       <div class="eyebrow">Your Chemistry Profile</div>
       <h1 class="sec-title">How Is Your<br><span>Brain Doing?</span></h1>
       <p class="sec-sub">One honest question per hormone. This is about you.</p>
-      <div style="margin-bottom:16px"><button class="btn-outline" onclick="switchPTab('quiz',document.querySelectorAll('.pnav-btn')[3])">← Back to Quiz</button></div>
+      <div style="margin-bottom:16px"><button class="btn-outline" onclick="goBackP()">← Back</button></div>
 
       <!-- paged question -->
       <div id="p-checkin-wrap">
@@ -463,8 +464,8 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--text);min-height
           <button class="c-arrow" onclick="pCpNext()">→</button>
         </div>
         <div class="cp-unlock" id="p-cp-unlock"></div>
-        <button class="btn-primary" id="p-cp-next-btn" style="display:none;margin-top:8px" onclick="switchPTab('report',document.querySelectorAll('.pnav-btn')[5])">READ THE REPORT →</button>
-        <button class="btn-outline" id="p-export-btn" style="display:none;margin-top:10px" onclick="pExportSummary()">⬇ Save My Brain Summary</button>
+        <button class="btn-outline" id="p-export-btn" style="display:none;margin-top:8px" onclick="pExportSummary()">⬇ Save My Brain Summary</button>
+        <button class="btn-primary" id="p-cp-next-btn" style="display:none;margin-top:10px" onclick="switchPTab('report',document.querySelectorAll('.pnav-btn')[5])">CONTINUE →</button>
         <p id="p-ios-hint" style="display:none;font-size:0.72rem;color:var(--muted);text-align:center;margin-top:6px;line-height:1.5">On iPhone: your summary will open in a new tab.<br>Press and hold the image → <strong>Save to Photos</strong>.</p>
         <button class="btn-outline" style="margin-top:10px" onclick="pResetCheckin()">← Redo Check-in</button>
       </div>
@@ -474,7 +475,7 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--text);min-height
     <div id="ptab-quiz" class="tab-panel">
       <div class="eyebrow">Test Yourself</div>
       <h1 class="sec-title">HOW WELL DO YOU<br><span>KNOW YOUR HORMONES?</span></h1>
-      <p class="sec-sub">Eight questions — the same quiz your child took today. How well do you know the hormones in your body?</p>
+      <p class="sec-sub">Eight questions. How well do you know the hormones in your body?</p>
       <div class="q-prog-bar"><div class="q-prog-fill" id="p-q-prog" style="width:0%"></div></div>
       <div id="p-quiz-content"></div>
       <div class="q-rx" id="p-q-rx"><span class="rx-em" id="p-rx-em"></span><div id="p-rx-txt"></div></div>
@@ -487,13 +488,13 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--text);min-height
         <h2 id="p-result-title" style="font-family:var(--font-d);font-size:1.6rem;margin-bottom:8px"></h2>
         <p id="p-result-msg" style="font-size:0.88rem;color:var(--muted);line-height:1.65;margin-bottom:20px"></p>
         <div class="btn-row">
-          <button class="btn-primary" onclick="switchPTab('report',document.querySelectorAll('.pnav-btn')[5])">READ THE REPORT →</button>
+          <button class="btn-primary" onclick="switchPTab('report',document.querySelectorAll('.pnav-btn')[5])">CONTINUE →</button>
           <button class="btn-outline" onclick="pRestartQuiz()">Retake Quiz</button>
-          <button class="btn-outline" onclick="switchPTab('crew',document.querySelectorAll('.pnav-btn')[2])">← Back to Crew</button>
+          <button class="btn-outline" onclick="goBackP()">← Back</button>
         </div>
       </div>
       <div id="p-quiz-back" style="margin-top:12px;display:none">
-        <button class="btn-outline" onclick="switchPTab('crew',document.querySelectorAll('.pnav-btn')[2])">← Back to Crew</button>
+        <button class="btn-outline" onclick="goBackP()">← Back</button>
       </div>
     </div>
 
@@ -559,8 +560,8 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--text);min-height
       </div>
 
       <div class="btn-row" style="margin-top:16px">
-        <button class="btn-primary" onclick="switchPTab('connect',document.querySelectorAll('.pnav-btn')[7])">THE CONNECTION CARD →</button>
-        <button class="btn-outline" onclick="switchPTab('report',document.querySelectorAll('.pnav-btn')[5])">← Back</button>
+        <button class="btn-primary" onclick="switchPTab('connect',document.querySelectorAll('.pnav-btn')[7])">CONTINUE →</button>
+        <button class="btn-outline" onclick="goBackP()">← Back</button>
       </div>
     </div>
 
@@ -622,8 +623,8 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--text);min-height
       </div>
 
       <div class="btn-row">
-        <button class="btn-primary" onclick="switchPTab('today',document.querySelectorAll('.pnav-btn')[6])">WHAT YOUR CHILD DID TODAY →</button>
-        <button class="btn-outline" onclick="switchPTab('brain',document.querySelectorAll('.pnav-btn')[4])">← Back</button>
+        <button class="btn-primary" onclick="switchPTab('today',document.querySelectorAll('.pnav-btn')[6])">CONTINUE →</button>
+        <button class="btn-outline" onclick="goBackP()">← Back</button>
       </div>
     </div>
 
@@ -657,7 +658,7 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--text);min-height
       </div>
       <div class="btn-row">
         <button class="btn-primary" onclick="switchPTab('finish',document.querySelectorAll('.pnav-btn')[8])">I'M READY TO FINISH →</button>
-        <button class="btn-outline" onclick="switchPTab('report',document.querySelectorAll('.pnav-btn')[5])">← Back</button>
+        <button class="btn-outline" onclick="goBackP()">← Back</button>
       </div>
     </div>
 
@@ -681,7 +682,7 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--text);min-height
         </div>
         <button class="btn-finish-p" id="p-finish-btn" onclick="pDoFinish()">Finish Thrive Day 1 →</button>
         <div style="margin-top:10px;width:100%;max-width:420px;margin-left:auto;margin-right:auto">
-          <button class="btn-outline" style="width:100%" onclick="switchPTab('connect',document.querySelectorAll('.pnav-btn')[7])">← Back to Connect</button>
+          <button class="btn-outline" style="width:100%" onclick="goBackP()">← Back</button>
         </div>
       </div>
 
@@ -757,13 +758,13 @@ const pCharacters=[
   {id:'endorphins',emoji:'🏃',char:'Endorphins',real:'Endorphins',color:'#06d6a0',
    what:'Released by hard exercise and real laughter. Very powerful — like natural painkillers. Resting or scrolling does not trigger them.',
    parentNote:'Parents who exercise handle hard conversations better — not because they are naturally calmer, but because their body resets regularly. Laughing with your child does the same.',
-   quizQ:{q:'What triggers endorphin release?',opts:['Gentle stretching and rest','Intense physical effort and genuine laughter','Watching television','Eating a good meal'],ans:1,
+   quizQ:{q:'What causes endorphin release?',opts:['Gentle stretching and rest','Intense physical effort and genuine laughter','Watching television','Eating a good meal'],ans:1,
     wrongRx:{emoji:'🏃',text:'Endorphins need intensity. Gentle activity does not trigger them. It has to be hard enough to feel uncomfortable.'},
     rightRx:{emoji:'🏃',text:'Correct — intensity and laughter. Both require real effort or genuine joy. Neither comes from passive activity.'}}},
   {id:'melatonin',emoji:'🌙',char:'Melatonin',real:'Melatonin',color:'#4361ee',
    what:'Made in darkness. Screens block it by up to 90 minutes. It tells your body that sleep is coming — it does not force sleep. Everything else in your brain depends on it.',
    parentNote:'A tired parent reacts worse. Most bad conversations happen when someone is exhausted.',
-   quizQ:{q:'What suppresses melatonin production?',opts:['Eating before bed','Blue light from screens','Cold temperatures','Exercise'],ans:1,
+   quizQ:{q:'What slows down melatonin production?',opts:['Eating before bed','Blue light from screens','Cold temperatures','Exercise'],ans:1,
     wrongRx:{emoji:'🌙',text:'Blue light from phones and laptops tells your brain it is still daytime — blocking Mel\'s <strong>sleep signal</strong> by up to 90 minutes.'},
     rightRx:{emoji:'🌙',text:'Blue light — from any screen. It signals your brain that it is still day. Melatonin cannot work until the light is gone.'}}},
 ];
@@ -893,7 +894,8 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 
 // ── TAB SWITCHING ──────────────────────────────
-function switchPTab(id,btn){
+function switchPTab(id,btn,skipHistory){
+  if(!skipHistory && pCurrentTab && pCurrentTab!==id) pNavHistory.push(pCurrentTab);
   document.querySelectorAll('.pnav-btn').forEach(b=>b.classList.remove('active'));
   if(btn)btn.classList.add('active');
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('open'));
@@ -909,6 +911,15 @@ function switchPTab(id,btn){
   pCurrentTab=id;
   autoSave();
   window.scrollTo(0,0);
+}
+
+function goBackP(){
+  if(pNavHistory.length===0) return;
+  const prev=pNavHistory.pop();
+  const navBtns=document.querySelectorAll('.pnav-btn');
+  const tabIds=['welcome','reflect','crew','quiz','brain','report','today','connect'];
+  const idx=tabIds.indexOf(prev);
+  switchPTab(prev, idx>=0?navBtns[idx]:null, true);
 }
 
 // ── REFLECT ────────────────────────────────────
@@ -930,9 +941,8 @@ function pSubmitReflection(){
   const statusEl=document.getElementById('p-refl-status');
   if(!pReflRating){statusEl.innerHTML='<span style="color:var(--red)">Please rate your day first.</span>';return;}
   if(!word){statusEl.innerHTML='<span style="color:var(--red)">Pick or type one word before saving.</span>';return;}
-  statusEl.innerHTML='<span style="color:#16a34a;font-weight:600">✓ Saved.</span>';
-  document.getElementById('p-refl-continue').style.display='block';
   autoSave();
+  switchPTab('crew',document.querySelectorAll('.pnav-btn')[2]);
 }
 
 // ── CREW LIST ──────────────────────────────────
@@ -1381,7 +1391,7 @@ function pLaunchConfetti(){
 const SUPA_URL='https://whiogsuokmnnryakcxig.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndoaW9nc3Vva21ubnJ5YWtjeGlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2MDAyNTMsImV4cCI6MjA5MDE3NjI1M30.pmhuBCe9C6iTSyqbHnPxYHdbVzLA3JuDRFTip5GCzsQ';
 const spClient=window.supabase.createClient(SUPA_URL,SUPA_KEY);
-let pCurrentTab='welcome',pRestoreTab=null,pSaveTimer=null;
+let pCurrentTab='welcome',pRestoreTab=null,pSaveTimer=null,pNavHistory=[];
 
 function spKey(name){
   return 'sbf2026_'+name.toLowerCase().replace(/\s+/g,'_').replace(/[^a-z0-9_]/g,'');
